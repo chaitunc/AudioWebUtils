@@ -1,5 +1,4 @@
 import sys, os, alsaaudio, time, audioop, numpy, glob,  scipy, subprocess, wave, cPickle, threading, shutil
-import matplotlib.pyplot as plt
 import scipy.io.wavfile as wavfile
 from scipy.fftpack import rfft
 import audioFeatureExtraction as aF	
@@ -8,6 +7,7 @@ import audioSegmentation as aS
 from scipy.fftpack import fft
 import matplotlib
 matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 Fs = 16000
 
