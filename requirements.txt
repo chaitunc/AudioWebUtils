@@ -1,0 +1,9 @@
+Flask
+NUMPY
+MATPLOTLIB
+SCIPY
+SKLEARN
+hmmlearn
+Simplejson
+eyeD3
+pydub
