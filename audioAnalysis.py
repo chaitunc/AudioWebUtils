@@ -3,6 +3,7 @@ import argparse
 import os
 import numpy
 import glob
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import audioFeatureExtraction as aF
 import audioTrainTest as aT

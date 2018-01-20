@@ -7,7 +7,7 @@ import audioTrainTest as aT
 import audioSegmentation as aS
 from scipy.fftpack import fft
 import matplotlib
-matplotlib.use('TkAgg')
+matplotlib.use('Agg')
 
 Fs = 16000
 

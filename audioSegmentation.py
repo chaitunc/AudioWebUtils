@@ -6,8 +6,8 @@ import os
 import audioFeatureExtraction as aF
 import audioTrainTest as aT
 import audioBasicIO
-matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+matplotlib.use('Agg')
 from scipy.spatial import distance
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm

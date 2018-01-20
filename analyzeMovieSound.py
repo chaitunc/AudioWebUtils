@@ -4,6 +4,7 @@ import scipy.io.wavfile as wavfile
 import audioBasicIO
 import audioTrainTest as aT
 import audioSegmentation as aS
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import scipy.spatial.distance
 minDuration = 7;
