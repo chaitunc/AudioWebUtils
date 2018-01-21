@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def hello():
-    return "Hello World!"
+     return "Hello World!"
 
 # endpoint to create new user
 @app.route("/getSegments", methods=["POST"])
@@ -17,11 +17,9 @@ def getSegments():
     url = fileUrl['url']
     print(url)
     [Fs, x] = aIO.readAudioFileFromUrl(url)
-    
     segments = aS.silenceRemoval(x, Fs, 0.020, 0.020, smoothWindow = 1.0, Weight = 0.3, plot = False)
-    print(Fs)
-    print(x)
-    return jsonify(segments)
+    print(segments)
+    return jsonify(results = segments)
 
 if __name__ == '__main__':
     app.run(debug=True)

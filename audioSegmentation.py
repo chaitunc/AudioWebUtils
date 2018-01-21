@@ -659,7 +659,7 @@ def silenceRemoval(x, Fs, stWin, stStep, smoothWindow=0.5, Weight=0.5, plot=Fals
         segmentLimits.append([curCluster[0] * stStep, curCluster[-1] * stStep])
 
     # Step 5: Post process: remove very small segments:
-    minDuration = 30
+    minDuration = 10
     segmentLimits2 = []
     for s in segmentLimits:
         if s[1] - s[0] > minDuration:
