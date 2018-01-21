@@ -1,4 +1,4 @@
-import os, glob, eyed3, ntpath, shutil, numpy
+import os, glob, eyed3, ntpath, shutil, numpy, sys
 import scipy.io.wavfile as wavfile
 from io import BytesIO
 import pydub
