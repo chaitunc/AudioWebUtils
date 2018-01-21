@@ -12,9 +12,11 @@ def hello():
 @app.route("/getSegments", methods=["POST"])
 def getSegments():
     print("received request")
-    fileUrl = request.values['url']
+    fileUrl = request.get_json()
     print(fileUrl)
-    [Fs, x] = aIO.readAudioFileFromUrl(fileUrl)
+    url = fileUrl['url']
+    print(url)
+    [Fs, x] = aIO.readAudioFileFromUrl(url)
     
     segments = aS.silenceRemoval(x, Fs, 0.020, 0.020, smoothWindow = 1.0, Weight = 0.3, plot = False)
     print(Fs)
