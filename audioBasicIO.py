@@ -76,6 +76,7 @@ def readAudioFileFromUrl(url):
         audiofile = AudioSegment.from_mp3(BytesIO(mp3))
     #except pydub.exceptions.CouldntDecodeError:
     except:
+        print("Unexpected error:", sys.exc_info()[0])
         print "Error: file not found or other I/O error. (DECODING FAILED)"
         return (-1,-1)                
 
