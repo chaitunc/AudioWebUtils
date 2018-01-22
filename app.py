@@ -31,6 +31,7 @@ def getSegments():
     http = credentials.authorize(http)
     service = discovery.build('drive', 'v2', http=http)
     url=service.files().get_media(fileId=fileId).execute()
+    print(len(url))
     [Fs, x] = aIO.readAudioFileFromUrl(url)
     segments = aS.silenceRemoval(x, Fs, 0.020, 0.020, smoothWindow = 1.0, Weight = 0.3, plot = False)
     print(segments)
