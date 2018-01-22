@@ -74,7 +74,7 @@ def readAudioFileFromUrl(url):
         bytesurl = BytesIO(url)
     except:
         print "error while readin bytesIO"        
-    print len(bytesurl)    
+        
     try:
         #mp3 = urllib.urlopen(url).read() 
         audiofile = AudioSegment.from_mp3(bytesurl)
