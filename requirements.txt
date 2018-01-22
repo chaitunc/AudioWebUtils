@@ -9,4 +9,5 @@ Simplejson
 eyeD3
 pydub
 setuptools
+distribute
 google-api-python-client
