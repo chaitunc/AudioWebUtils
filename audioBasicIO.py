@@ -70,10 +70,14 @@ def readAudioFileFromUrl(url):
     '''
     This function returns a numpy array that stores the audio samples of a specified WAV of AIFF file
     '''
-        
+    try:
+        bytesurl = BytesIO(url)
+    except:
+        print "error while readin bytesIO"        
+    print len(bytesurl)    
     try:
         #mp3 = urllib.urlopen(url).read() 
-        audiofile = AudioSegment.from_mp3(BytesIO(url))
+        audiofile = AudioSegment.from_mp3(bytesurl)
     #except pydub.exceptions.CouldntDecodeError:
     except:
         print("Unexpected error:", sys.exc_info()[0])
