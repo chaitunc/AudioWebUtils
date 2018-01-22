@@ -4,7 +4,6 @@ from io import BytesIO
 import pydub
 import urllib 
 from pydub import AudioSegment
-from urllib.error import URLError, HTTPError
 
 def convertDirMP3ToWav(dirName, Fs, nC, useMp3TagsAsName = False):
     '''
@@ -73,13 +72,9 @@ def readAudioFileFromUrl(url):
     '''
         
     try:
-        mp3 = urllib.urlopen(url).read() 
-        audiofile = AudioSegment.from_mp3(BytesIO(mp3))
+        #mp3 = urllib.urlopen(url).read() 
+        audiofile = AudioSegment.from_mp3(BytesIO(url))
     #except pydub.exceptions.CouldntDecodeError:
-    except URLError as e:
-        print(e.reason)
-    except HTTPError as he:
-        print(he.reason)
     except:
         print("Unexpected error:", sys.exc_info()[0])
         print "Error: file not found or other I/O error. (DECODING FAILED)"
