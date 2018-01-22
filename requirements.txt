@@ -8,4 +8,4 @@ hmmlearn
 Simplejson
 eyeD3
 pydub
---upgrade google-api-python-client
+google-api-python-client
