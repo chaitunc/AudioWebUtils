@@ -612,7 +612,9 @@ def silenceRemoval(x, Fs, stWin, stStep, smoothWindow=0.5, Weight=0.5, plot=Fals
     print(" Step 1: feature extraction")
     x = audioBasicIO.stereo2mono(x)                        # convert to mono
     ShortTermFeatures = aF.stFeatureExtraction(x, Fs, stWin * Fs, stStep * Fs)        # extract short-term features
+    return ShortTermFeatures
 
+def step2(ShortTermFeatures):
     print("# Step 2: train binary SVM classifier of low vs high energy frames")
     EnergySt = ShortTermFeatures[1, :]                  # keep only the energy short-term sequence (2nd feature)
     E = numpy.sort(EnergySt)                            # sort the energy feature values:
@@ -625,7 +627,9 @@ def silenceRemoval(x, Fs, stWin, stStep, smoothWindow=0.5, Weight=0.5, plot=Fals
 
     [featuresNormSS, MEANSS, STDSS] = aT.normalizeFeatures(featuresSS)   # normalize and ...
     SVM = aT.trainSVM(featuresNormSS, 1.0)                               # train the respective SVM probabilistic model (ONSET vs SILENCE)
+    return SVM, MEANSS, STDSS
 
+def step3(ShortTermFeatures, MEANSS, STDSS, SVM, stStep, smoothWindow=0.5, Weight=0.5):
     print("# Step 3: compute onset probability based on the trained SVM")
     ProbOnset = []
     for i in range(ShortTermFeatures.shape[1]):                    # for each frame
@@ -640,6 +644,9 @@ def silenceRemoval(x, Fs, stWin, stStep, smoothWindow=0.5, Weight=0.5, plot=Fals
     T = (numpy.mean((1 - Weight) * ProbOnsetSorted[0:Nt]) + Weight * numpy.mean(ProbOnsetSorted[-Nt::]))
 
     MaxIdx = numpy.where(ProbOnset > T)[0]                         # get the indices of the frames that satisfy the thresholding
+    return MaxIdx 
+    
+def step4(MaxIdx,stStep):    
     i = 0
     timeClusters = []
     segmentLimits = []
@@ -666,23 +673,7 @@ def silenceRemoval(x, Fs, stWin, stStep, smoothWindow=0.5, Weight=0.5, plot=Fals
             segmentLimits2.append(s)
     segmentLimits = segmentLimits2
 
-    if plot:
-        timeX = numpy.arange(0, x.shape[0] / float(Fs), 1.0 / Fs)
-
-        plt.subplot(2, 1, 1)
-        plt.plot(timeX, x)
-        for s in segmentLimits:
-            plt.axvline(x=s[0])
-            plt.axvline(x=s[1])
-        plt.subplot(2, 1, 2)
-        plt.plot(numpy.arange(0, ProbOnset.shape[0] * stStep, stStep), ProbOnset)
-        plt.title('Signal')
-        for s in segmentLimits:
-            plt.axvline(x=s[0])
-            plt.axvline(x=s[1])
-        plt.title('SVM Probability')
-        plt.show()
-
+   
     return segmentLimits
 
 
