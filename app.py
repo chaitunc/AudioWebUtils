@@ -36,8 +36,9 @@ def getSegments():
     
     def silentSegments(url):
         [Fs, x] = aIO.readAudioFileFromUrl(url)
-        yield jsonify(Fs).data
         ShortTermFeatures = aS.silenceRemoval(x, Fs, 0.020, 0.020, smoothWindow = 1.0, Weight = 0.3, plot = False)
+        print("so far completed..")
+        yield jsonify(Fs).data
         [SVM, MEANSS, STDSS] = aS.step2(ShortTermFeatures)
         MaxIdx = aS.step3(ShortTermFeatures, MEANSS, STDSS, SVM, 0.020, smoothWindow = 1.0, Weight = 0.3)
         segments = aS.step4(MaxIdx,0.020)
