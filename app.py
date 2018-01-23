@@ -7,8 +7,8 @@ from oauth2client import tools
 from oauth2client.file import Storage
 from io import BytesIO
 from oauth2client.client import AccessTokenCredentials
-from flask import stream_with_context, request, Response
-
+from flask import stream_with_context, request, Response, json
+from asyncTask import AsyncTask
 import audioBasicIO as aIO
 import audioSegmentation as aS 
 import httplib2
@@ -22,8 +22,8 @@ def hello():
      return "Hello World!"
 
 # endpoint to create new user
-@app.route("/getSegments", methods=["POST"])
-def getSegments():
+@app.route("/submitForSegments", methods=["POST"])
+def submitForSegments():
     print("received request")
     fileUrl = request.get_json()
     fileId = fileUrl['id']
@@ -33,22 +33,20 @@ def getSegments():
     http = credentials.authorize(http)
     service = discovery.build('drive', 'v2', http=http)
     url=service.files().get_media(fileId=fileId).execute()
-    
-    def silentSegments(url):
-        [Fs, x] = aIO.readAudioFileFromUrl(url)
-        ShortTermFeatures = aS.silenceRemoval(x, Fs, 0.020, 0.020, smoothWindow = 1.0, Weight = 0.3, plot = False)
-        print("so far completed..")
-        yield jsonify(Fs).data
-        [SVM, MEANSS, STDSS] = aS.step2(ShortTermFeatures)
-        MaxIdx = aS.step3(ShortTermFeatures, MEANSS, STDSS, SVM, 0.020, smoothWindow = 1.0, Weight = 0.3)
-        segments = aS.step4(MaxIdx,0.020)
-        print(segments)
-        yield jsonify(results = segments).data
-    
-    
-    return Response(stream_with_context(silentSegments(url)), content_type='application/json')
+    async_task = AsyncTask(fileId, url)
+    async_task.start()
+    return jsonify("Submitted")
 
-
+@app.route("/getSegments", methods=["POST"])
+def getSegments():
+    print("received request")
+    fileUrl = request.get_json()
+    fileId = fileUrl['id']
+    outputFile = open(fileId,"r")
+    segments = outputFile.read()
+    outputFile.close()
+    os.remove(outputFile.name)
+    return jsonify(results = segments) 
 
 
 if __name__ == '__main__':
