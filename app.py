@@ -25,7 +25,6 @@ def hello():
 def getSegments():
     print("received request")
     fileUrl = request.get_json()
-    print(fileUrl)
     fileId = fileUrl['id']
     accessToken = fileUrl['accessToken']
     credentials = AccessTokenCredentials(accessToken, 'my-user-agent/1.0')
@@ -33,12 +32,7 @@ def getSegments():
     http = credentials.authorize(http)
     service = discovery.build('drive', 'v2', http=http)
     url=service.files().get_media(fileId=fileId).execute()
-    print(len(url))
-    bytesurl = BytesIO(url)
-    
     [Fs, x] = aIO.readAudioFileFromUrl(url)
-    print (Fs)
-    print (x)
     segments = aS.silenceRemoval(x, Fs, 0.020, 0.020, smoothWindow = 1.0, Weight = 0.3, plot = False)
     print(segments)
     return jsonify(results = segments)
@@ -47,4 +41,4 @@ def getSegments():
 
 
 if __name__ == '__main__':
-    app.run(host= '0.0.0.0',debug=True)
+    app.run()
