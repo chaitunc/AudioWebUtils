@@ -8,4 +8,5 @@ hmmlearn
 Simplejson
 eyeD3
 pydub
+pika
 google-api-python-client
