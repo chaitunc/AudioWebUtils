@@ -23,7 +23,7 @@ app = Flask(__name__)
 
 
 connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host='192.168.99.100'))
+        host='127.0.0.1'))
 channel = connection.channel()
 
 
@@ -48,7 +48,7 @@ def callback(ch, method, properties, body):
     MaxIdx = aS.step3(ShortTermFeatures, MEANSS, STDSS, SVM, 0.020, smoothWindow = 1.0, Weight = 0.3)
     segments = aS.step4(MaxIdx,0.020)
     sendConnection = pika.BlockingConnection(pika.ConnectionParameters(
-        host='192.168.99.100'))
+        host='127.0.0.1'))
     sendChannel = sendConnection.channel()
     returnData = {}
     returnData['segments'] = segments
