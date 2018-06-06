@@ -75,7 +75,7 @@ channel.start_consuming()
 def hello():
      return "Hello World!"
 
-# endpoint to create new user
+# endpoint to submitForSegments 
 @app.route("/submitForSegments", methods=["POST"])
 def submitForSegments():
     print("received request submitForSegments")
