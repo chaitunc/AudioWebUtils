@@ -10,3 +10,4 @@ eyeD3
 pydub
 pika
 google-api-python-client
+oauth2client 
