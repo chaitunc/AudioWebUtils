@@ -22,8 +22,12 @@ app = Flask(__name__)
 
 
 
-connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host='127.0.0.1'))
+# Parse CLODUAMQP_URL (fallback to localhost)
+url = os.environ.get('RABBITMQ_BIGWIG_RX_URL')
+params = pika.URLParameters(url)
+params.socket_timeout = 5
+
+connection = pika.BlockingConnection(params) # Connect to CloudAMQP
 channel = connection.channel()
 
 
