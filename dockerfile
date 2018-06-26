@@ -5,5 +5,4 @@ COPY . /AudioWebUtils
 WORKDIR /AudioWebUtils
 RUN pip install -r requirements.txt 
 COPY ffmpeg /usr/local/bin
-ENTRYPOINT ["python"]
-CMD ["app.py"] 
+CMD gunicorn --bind 0.0.0.0:$PORT app:app
