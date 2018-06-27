@@ -21,7 +21,6 @@ from oauth2client.service_account import ServiceAccountCredentials
 app = Flask(__name__)
 
 
-<<<<<<< HEAD
 @app.route("/init")
 def init():
     # Parse CLODUAMQP_URL (fallback to localhost)
@@ -34,19 +33,9 @@ def init():
     channel.basic_consume(callback,
                       queue='findSegments',
                       no_ack=True)
-=======
->>>>>>> parent of df55250... test
+    print(' [*] Waiting for messages. To exit press CTRL+C')
+    channel.start_consuming()
 
-# Parse CLODUAMQP_URL (fallback to localhost)
-url = os.environ.get('RABBITMQ_BIGWIG_RX_URL')
-params = pika.URLParameters(url)
-params.socket_timeout = 5
-
-connection = pika.BlockingConnection(params) # Connect to CloudAMQP
-channel = connection.channel()
-
-
-channel.queue_declare(queue='findSegments')
 
 def callback(ch, method, properties, body):
     fileUrl = json.loads(body)
@@ -82,12 +71,6 @@ def callback(ch, method, properties, body):
     sendConnection.close()
     print(" [x] Received %r")
 
-channel.basic_consume(callback,
-                      queue='findSegments',
-                      no_ack=True)
-
-print(' [*] Waiting for messages. To exit press CTRL+C')
-channel.start_consuming()
 
 
 @app.route("/")
