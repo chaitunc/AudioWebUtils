@@ -45,7 +45,7 @@ def on_open(connection):
 
 # Step #4
 def on_channel_open(channel):
-    channel.queue_declare(queue='findSegments')
+    channel.queue_declare(queue='findSegments', nowait=True)
     channel.basic_consume(callback,
                       queue='findSegments',
                       no_ack=True)
