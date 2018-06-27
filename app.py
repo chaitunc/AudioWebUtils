@@ -28,7 +28,7 @@ def init():
     url = os.environ.get('RABBITMQ_BIGWIG_RX_URL')
     params = pika.URLParameters(url)
     params.socket_timeout = 5
-    connection = pika.SelectConnection(params) # Connect to CloudAMQP
+    connection = pika.BlockingConnection(params) # Connect to CloudAMQP
     channel = connection.channel()
     channel.queue_declare(queue='findSegments')
     channel.basic_consume(callback,
@@ -66,11 +66,8 @@ def callback(ch, method, properties, body):
     [SVM, MEANSS, STDSS] = aS.step2(ShortTermFeatures)
     MaxIdx = aS.step3(ShortTermFeatures, MEANSS, STDSS, SVM, 0.020, smoothWindow = 1.0, Weight = 0.3)
     segments = aS.step4(MaxIdx,0.020)
-    # Parse CLODUAMQP_URL (fallback to localhost)
-    url = os.environ.get('RABBITMQ_BIGWIG_RX_URL')
-    params = pika.URLParameters(url)
-    params.socket_timeout = 5
-    sendConnection = pika.SelectConnection(params) # Connect to CloudAMQP
+    sendConnection = pika.BlockingConnection(pika.ConnectionParameters(
+        host='127.0.0.1'))
     sendChannel = sendConnection.channel()
     returnData = {}
     returnData['segments'] = segments
