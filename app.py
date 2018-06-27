@@ -45,14 +45,18 @@ def on_open(connection):
 
 # Step #4
 def on_channel_open(channel):
-    channel.queue_declare(queue='findSegments')
+    channel.queue_declare(callback2, 
+                          queue='findSegments')
     channel.basic_consume(callback,
                       queue='findSegments',
                       no_ack=True)
     print(' [*] Waiting for messages. To exit press CTRL+C')
-    channel.start_consuming()
+    #channel.start_consuming()
 
-
+def callback2(channel):
+    print(" queue declared" )    
+    
+    
 def callback(ch, method, properties, body):
     fileUrl = json.loads(body)
     print(" [x] Received %r" % fileUrl)
