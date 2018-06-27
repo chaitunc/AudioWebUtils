@@ -82,6 +82,7 @@ def readAudioFileFromUrl(url):
     except OSError as e:
         print (e.args[0])
         print (e.args[1])
+        return (-1,-1) 
     except:
         print("Unexpected error:", sys.exc_info()[0])
         print "Error: file not found or other I/O error. (DECODING FAILED)"
