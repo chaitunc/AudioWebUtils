@@ -28,9 +28,9 @@ class AsyncTask(threading.Thread):
     # Step #4
     def on_channel_open(self,channel):
         channel.queue_declare(self.callback2, 
-                              queue='findSegments2')
+                              queue='findSegments')
         channel.basic_consume(self.callback,
-                          queue='findSegments2',
+                          queue='findSegments',
                           no_ack=True)
         print(' [*] Waiting for messages. To exit press CTRL+C')
         #channel.start_consuming()
@@ -79,6 +79,7 @@ class AsyncTask(threading.Thread):
     
     def run(self):
         # Parse CLODUAMQP_URL (fallback to localhost)
+        print(" [x] start thread")
         url = os.environ.get('RABBITMQ_BIGWIG_RX_URL')
         #url = 'amqp://_KUhGa2L:tDLeVGqDJCtkQmm7OBsGbiDhLsgL8h8s@scared-cowslip-30.bigwig.lshift.net:10243/ULoe2nXhmn9Y'
         params = pika.URLParameters(url)
