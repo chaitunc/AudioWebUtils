@@ -6,7 +6,7 @@ WORKDIR /AudioWebUtils
 RUN pip install -r requirements.txt 
 COPY ffmpeg /usr/local/bin
 COPY ffprobe /usr/local/bin
-chmod +x /usr/local/bin/ffmpeg
-chmod +x /usr/local/bin/ffprobe
+RUN chmod +x /usr/local/bin/ffmpeg
+RUN chmod +x /usr/local/bin/ffprobe
 ENV PATH="/usr/local/bin:${PATH}"
 CMD gunicorn --bind 0.0.0.0:$PORT app:app
