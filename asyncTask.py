@@ -58,7 +58,7 @@ class AsyncTask(threading.Thread):
         [SVM, MEANSS, STDSS] = aS.step2(ShortTermFeatures)
         MaxIdx = aS.step3(ShortTermFeatures, MEANSS, STDSS, SVM, 0.020, smoothWindow = 1.0, Weight = 0.3)
         segments = aS.step4(MaxIdx,0.020)
-        queueurl = os.environ.get('RABBITMQ_BIGWIG_TX_URL')
+        queueurl = os.environ.get('CLOUDAMQP_URL')
         #queueurl = 'amqp://_KUhGa2L:tDLeVGqDJCtkQmm7OBsGbiDhLsgL8h8s@scared-cowslip-30.bigwig.lshift.net:10242/ULoe2nXhmn9Y'
         params = pika.URLParameters(queueurl)
         sendConnection = pika.BlockingConnection(params)
@@ -80,7 +80,7 @@ class AsyncTask(threading.Thread):
     def run(self):
         # Parse CLODUAMQP_URL (fallback to localhost)
         print(" [x] start thread")
-        url = os.environ.get('RABBITMQ_BIGWIG_RX_URL')
+        url = os.environ.get('CLOUDAMQP_URL')
         #url = 'amqp://_KUhGa2L:tDLeVGqDJCtkQmm7OBsGbiDhLsgL8h8s@scared-cowslip-30.bigwig.lshift.net:10243/ULoe2nXhmn9Y'
         params = pika.URLParameters(url)
         params.socket_timeout = 5
