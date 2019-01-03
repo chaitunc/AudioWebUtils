@@ -21,12 +21,15 @@ from oauth2client.service_account import ServiceAccountCredentials
 app = Flask(__name__)
 
 
-@app.route("/")
+@app.route("/boot")
 def hello():
      async_task = AsyncTask()
      async_task.start()
+     return "Starting Queues!"
+
+@app.route("/")
+def hello():
      return "Hello World!"
-
-
+ 
 if __name__ == '__main__':
     app.run(host= '0.0.0.0',debug=True)
