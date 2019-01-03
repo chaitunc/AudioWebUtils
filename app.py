@@ -22,7 +22,7 @@ app = Flask(__name__)
 
 
 @app.route("/boot")
-def hello():
+def boot():
      async_task = AsyncTask()
      async_task.start()
      return "Starting Queues!"
