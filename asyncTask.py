@@ -16,6 +16,7 @@ import os.path
 import logging
 import pika
 from oauth2client.service_account import ServiceAccountCredentials
+from pydub.silence import detect_silence
 
 import threading  
 class AsyncTask(threading.Thread):
@@ -53,18 +54,23 @@ class AsyncTask(threading.Thread):
         service = discovery.build('drive', 'v2', http=http)
         url=service.files().get_media(fileId=fileId).execute()
         print(len(url))
-        [Fs, x] = aIO.readAudioFileFromUrl(url)
-        ShortTermFeatures = aS.silenceRemoval(x, Fs, 0.020, 0.020, smoothWindow = 1.0, Weight = 0.3, plot = False)
-        [SVM, MEANSS, STDSS] = aS.step2(ShortTermFeatures)
-        MaxIdx = aS.step3(ShortTermFeatures, MEANSS, STDSS, SVM, 0.020, smoothWindow = 1.0, Weight = 0.3)
-        segments = aS.step4(MaxIdx,0.020)
+        song = aIO.readAudioFileFromUrlTest(url)
+        silent_ranges = detect_silence(song,min_silence_len=1000, 
+        # consider it silent if quieter than -16 dBFS
+        #Adjust this per requirement
+        silence_thresh=-16 )
+        for start, end in silent_ranges:
+            print("start and end ")
+            print(start)
+            print(end)
+        
         queueurl = os.environ.get('CLOUDAMQP_URL')
         #queueurl = 'amqp://_KUhGa2L:tDLeVGqDJCtkQmm7OBsGbiDhLsgL8h8s@scared-cowslip-30.bigwig.lshift.net:10242/ULoe2nXhmn9Y'
         params = pika.URLParameters(queueurl)
         sendConnection = pika.BlockingConnection(params)
         sendChannel = sendConnection.channel()
         returnData = {}
-        returnData['segments'] = segments
+        returnData['segments'] = silent_ranges
         returnData['id'] = fileId
         message = json.dumps(returnData) 
         #sendChannel.queue_declare(self.callback2, 

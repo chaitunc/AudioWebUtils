@@ -66,6 +66,30 @@ def convertFsDirWavToWav(dirName, Fs, nC):
         print(command)
         os.system(command)
 
+def readAudioFileFromUrlTest(url):
+    '''
+    This function returns a numpy array that stores the audio samples of a specified WAV of AIFF file
+    '''
+    try:
+        bytesurl = BytesIO(url)
+    except:
+        print "error while readin bytesIO"        
+        
+    try:
+        #mp3 = urllib.urlopen(url).read() 
+        audiofile = AudioSegment.from_mp3(bytesurl)
+    #except pydub.exceptions.CouldntDecodeError:
+    except OSError as e:
+        print (e.args[0])
+        print (e.args[1])
+        return (-1,-1) 
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+        print "Error: file not found or other I/O error. (DECODING FAILED)"
+        return (-1,-1)                
+
+    return audiofile
+
 def readAudioFileFromUrl(url):
     '''
     This function returns a numpy array that stores the audio samples of a specified WAV of AIFF file
