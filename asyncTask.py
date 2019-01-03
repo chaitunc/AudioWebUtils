@@ -75,7 +75,7 @@ class AsyncTask(threading.Thread):
         message = json.dumps(returnData) 
         #sendChannel.queue_declare(self.callback2, 
         #                          queue='getSegments')
-        
+        sendChannel.queue_declare(queue='getSegments')
         sendChannel.basic_publish(exchange='',
                               routing_key='getSegments',
                               body=message)
